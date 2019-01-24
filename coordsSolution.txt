@@ -25,4 +25,3 @@ invalid
 invalid
 invalid
 invalid
-fail
