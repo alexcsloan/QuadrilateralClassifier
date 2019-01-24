@@ -1,6 +1,6 @@
 all: main
 
-sud: main.cpp
+main: main.cpp
 	clang++ main.cpp -std=cpp11 -o main
 
 test: main
