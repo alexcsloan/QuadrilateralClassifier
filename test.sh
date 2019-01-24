@@ -3,10 +3,10 @@ diff coordsOutput.txt coordsSolution.txt
 error=$?
 if [ $error -eq 0 ]
 then
-echo "test passed"
+echo "test passed!"
 elif [ $error -eq 1 ]
 then
-echo "test failed"
+echo "test failed!"
 else
-echo "test didn't run properly"
+echo "test didn't run properly!"
 fi
