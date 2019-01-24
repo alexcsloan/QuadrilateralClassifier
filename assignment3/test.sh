@@ -1,1 +1,0 @@
-./main < coords.txt > coordsOutput.txt diff coordsSolution.txt
