@@ -1,7 +1,7 @@
 all: main
 
 main: main.cpp
-	clang++ main.cpp -std=cpp11 -o main
+	clang++ main.cpp -o main
 
 test: main
 	./test.sh
