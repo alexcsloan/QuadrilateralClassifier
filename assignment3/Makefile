@@ -1,7 +1,7 @@
 all: main
 
 sud: main.cpp
-	clang++ main.cpp -std=cpp14 -o main
+	clang++ main.cpp -std=cpp11 -o main
 
 test: sud
 	./test.sh
