@@ -35,8 +35,6 @@ bool isRhombus(const vector<double> &sides, const vector<double> &slopes){
 
 bool isRectangle(const vector<double> &sides, const vector<double> &slopes){
     if(sides[0]!=sides[2] || sides[1]!=sides[3]) return false;
-
-    if(slopes[0]==90 && slopes[2]==90 && slopes[1]==0 && slopes[3]==0) return true;
     if(slopes[0]==0 && slopes[2]==0 && slopes[1]==90 && slopes[3]==90) return true;
     
 
@@ -71,14 +69,6 @@ bool isKite(const vector<double> &sides){
     return counter==2;
 }
 
-bool isScalene(const vector<double> &sides){
-    
-    if(sides[0]==sides[1] || sides[0]==sides[2] || sides[0]==sides[3]) return false;
-    if(sides[1]==sides[2] || sides[1]==sides[3]) return false;
-    if(sides[2]==sides[3]) return false;
-
-    return true;
-}
 
 //this function will return a vector with the length of the 4 sides of the shape and the 4 angles
 vector<double> parseString (const string& input){
@@ -231,107 +221,12 @@ void readInputDetermineShape (){
     }
 }
 
-void squareTests () {
-    vector <double> one = parseString("4 0 4 4 0 4");
-    vector <double> two = parseString("5 0 5 5 0 5");
-    
-    if(determineShape(one) != "square") cout<<"square test 1 failed"<<endl;
-    if(determineShape(two) != "square") cout<<"square test 2 failed"<<endl;
-}
 
-void rectangleTests () {
-    vector <double> one = parseString("4 0 4 2 0 2");
-    vector <double> two = parseString("9 0 9 5 0 5");
-    
-    if(determineShape(one) != "rectangle") cout<<"rectangle test 1 failed"<<endl;
-    if(determineShape(two) != "rectangle") cout<<"rectangle test 2 failed"<<endl;
-}
-
-void trapezoidTests () {
-    vector <double> one = parseString("5 0 4 2 1 2");
-    vector <double> two = parseString("7 0 9 5 1 5");
-    
-    if(determineShape(one) != "trapezoid") cout<<"trapezoid test 1 failed"<<endl;
-    if(determineShape(two) != "trapezoid") cout<<"trapezoid test 2 failed"<<endl;
-}
-
-void kiteTests () {
-    vector <double> one = parseString("7 1 8 4 5 5");
-    vector <double> two = parseString("3 0 8 8 0 3");
-    
-    if(determineShape(one) != "kite") cout<<"kite test 1 failed"<<endl;
-    if(determineShape(two) != "kite") cout<<"kite test 2 failed"<<endl;
-}
-
-void parallelogramTests () {
-    vector <double> one = parseString("6 0 9 4 3 4");
-    vector <double> two = parseString("4 3 5 7 1 4");
-    
-    if(determineShape(one) != "parallelogram") cout<<"parallelogram test 1 failed"<<endl;
-    if(determineShape(two) != "parallelogram") cout<<"parallelogram test 2 failed"<<endl;
-}
-
-void rhombusTests () {
-    vector <double> one = parseString("5 0 8 4 3 4");
-    vector <double> two = parseString("5 0 9 3 4 3");
-    
-    if(determineShape(one) != "rhombus") cout<<"rhombus test 1 failed"<<endl;
-    if(determineShape(two) != "rhombus") cout<<"rhombus test 2 failed"<<endl;
-}
-
-void quadrilateralTests () {
-    vector <double> one = parseString("9 4 6 9 1 3");
-    vector <double> two = parseString("1 4 4 4 0 8");
-    vector <double> three = parseString("9 4 6 9 1 3");
-    
-    if(determineShape(one) != "quadrilateral") cout<<"quadrilateral test 1 failed"<<endl;
-    if(determineShape(two) != "quadrilateral") cout<<"quadrilateral test 2 failed"<<endl;
-    if(determineShape(three) != "quadrilateral") cout<<"quadrilateral test 2 failed"<<endl;
-    
-}
-
-void overlappingPointsTests () {
-    vector <double> one = parseString("0 0 6 9 1 3");
-    vector <double> two = parseString("1 4 4 4 1 4");
-    vector <double> three = parseString("9 4 0 0 1 3");
-    vector <double> four = parseString("1 3 6 9 1 3");
-    vector <double> five = parseString("9 4 6 9 0 0");
-    
-    if(determineShape(one) != "invalid") cout<<"overlapping points test 1 failed"<<endl;
-    if(determineShape(two) != "invalid") cout<<"overlapping points test 2 failed"<<endl;
-    if(determineShape(three) != "invalid") cout<<"overlapping points test 3 failed"<<endl;
-    if(determineShape(four) != "invalid") cout<<"overlapping points test 4 failed"<<endl;
-    if(determineShape(five) != "invalid") cout<<"overlapping points test 5 failed"<<endl;
-
-}
-
-void sameSlopeTests () {
-    vector <double> one = parseString("6 0 0 5 0 4");
-    vector <double> two = parseString("6 0 4 4 2 8");
-    vector <double> three = parseString("10 0 5 4 0 8");
-    
-    if(determineShape(one) != "invalid") cout<<"same slope test 1 failed"<<endl;
-    if(determineShape(two) != "invalid") cout<<"same slope test 2 failed"<<endl;
-    if(determineShape(three) != "invalid") cout<<"same slope test 3 failed"<<endl;
-}
-
-void shapeTests () {
-    squareTests();
-    rectangleTests();
-    trapezoidTests();
-    kiteTests();
-    parallelogramTests();
-    rhombusTests();
-    quadrilateralTests();
-    overlappingPointsTests();
-    sameSlopeTests();
-}
 
 
 int main(int argc, const char * argv[]) {
 
     readInputDetermineShape();
-    //shapeTests();
     
     
     return 0;
