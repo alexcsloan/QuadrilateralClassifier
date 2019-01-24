@@ -3,8 +3,8 @@ all: main
 sud: main.cpp
 	clang++ main.cpp -std=cpp11 -o main
 
-test: sud
+test: main
 	./test.sh
 
 clean:
-	rm -f sud
+	rm -f main
