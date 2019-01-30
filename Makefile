@@ -35,6 +35,7 @@ clean:
 cover:
 	clang++ -fprofile-instr-generate -fcoverage-mapping main.cpp -o main
 	
+	
 	LLVM_PROFILE_FILE="profraw/err1.profraw" ./main < txtFiles/err1.txt
 	LLVM_PROFILE_FILE="profraw/err2.profraw" ./main < txtFiles/err2.txt
 	LLVM_PROFILE_FILE="profraw/err3.profraw" ./main < txtFiles/err3.txt
@@ -50,6 +51,8 @@ cover:
 	LLVM_PROFILE_FILE="profraw/err13.profraw" ./main < txtFiles/err13.txt
 	LLVM_PROFILE_FILE="profraw/err14.profraw" ./main < txtFiles/err14.txt
 	LLVM_PROFILE_FILE="profraw/err15.profraw" ./main < txtFiles/err15.txt
+
+
 	LLVM_PROFILE_FILE="profraw/kite.profraw" ./main < txtFiles/kite.txt
 	LLVM_PROFILE_FILE="profraw/parallelogram.profraw" ./main < txtFiles/parallelogram.txt
 	LLVM_PROFILE_FILE="profraw/quadrilateral.profraw" ./main < txtFiles/quadrilateral.txt
