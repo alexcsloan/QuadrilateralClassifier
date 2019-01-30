@@ -14,14 +14,26 @@ rhombus
 rhombus
 quadrilateral
 quadrilateral
-invalid
-invalid
-invalid
-invalid
-invalid
-invalid
-invalid
-invalid
-invalid
-invalid
-invalid
+error 4
+error 4
+error 4
+error 2
+error 2
+error 2
+error 2
+error 2
+error 1
+error 1
+error 4
+error 1
+error 1
+error 1
+error 1
+error 3
+error 3
+error 4
+error 4
+error 4
+trapezoid
+error 3
+error 3
