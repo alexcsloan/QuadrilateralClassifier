@@ -1,0 +1,4 @@
+rectangle
+rectangle
+rectangle
+error 4
