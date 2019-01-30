@@ -81,12 +81,14 @@ bool doLinesIntersect (const vector<double> &coords){
         if(intersection1.second > coords[3]){
             return false;
         }
+
         return true;
     }
     if(intersection2.first<xMax && intersection2.second<yMax && intersection2.second>0 && intersection2.second>0){
         return true;
     }
     
+
     return false;
 }
 
