@@ -31,6 +31,17 @@ clean:
 	rm -f txtFiles/rhombusOutput.txt
 	rm -f txtFiles/squareOutput.txt
 	rm -f txtFiles/trapezoidOutput.txt
+	rm -f default.prograw
+	rm -f main.profdata
+	rm -f coverage.profdata
+	rm -rf testFiles/*
+
+fuzzer:
+	clang++ main.cpp -o main
+	chmod +x shapes.py
+	./shapes.py
+	chmod +x fuzz
+	
 
 cover:
 	clang++ -fprofile-instr-generate -fcoverage-mapping main.cpp -o main

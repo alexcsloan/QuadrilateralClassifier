@@ -74,6 +74,8 @@ bool doLinesIntersect (const vector<double> &coords){
             yMax=coords[i];
         }
     }
+    
+    
 
     if(intersection1.first<xMax && intersection1.second<yMax && intersection1.first>0 && intersection1.second>0){
 
@@ -94,11 +96,16 @@ bool doLinesIntersect (const vector<double> &coords){
 
 
 bool isParallelogram(const vector<double> &sides, const vector<double> &slopes){
-    int counter = 0;
-    if(slopes[0]==slopes[2] && slopes[1]==slopes[3]) counter++;
-    if(sides[0]==sides[2] && sides[1]==sides[3]) counter++;
+//    int counter = 0;
+//    if(slopes[0]==slopes[2] && slopes[1]==slopes[3]) counter++;
+//    if(sides[0]==sides[2] && sides[1]==sides[3]) counter++;
+//
+//    return counter==2;
     
-    return counter==2;
+    if (slopes[0] == slopes[2] && slopes[1] == slopes[3] && slopes[0] != slopes[1]) {
+        return true;
+    }
+    return false;
 }
 
 bool isRhombus(const vector<double> &sides, const vector<double> &slopes){
@@ -113,7 +120,9 @@ bool isRhombus(const vector<double> &sides, const vector<double> &slopes){
 
 bool isRectangle(const vector<double> &sides, const vector<double> &slopes){
     if(sides[0]!=sides[2] || sides[1]!=sides[3]) return false;
-    if(slopes[0]==0 && slopes[2]==0 && slopes[1]==90 && slopes[3]==90) return true;
+
+    //if(slopes[0]==0 && slopes[2]==0 && slopes[1]==90 && slopes[3]==90) return true;
+    if(slopes[0]==0 && slopes[2]==0 && slopes[1]==0 && slopes[3]==0) return true;
     
     
     return false;
@@ -197,10 +206,16 @@ double calculateSlope(double x1, double y1, double x2, double y2){
     
     //decided to make a vertical line return 90 while a horizontal line will return 0
     if(dx==0){
-        return 90;
+        //return 90;
+        return 0;
     }
     
+    
     double slope = dy / dx;
+    
+//    if(slope==90){
+//        return 90.5;
+//    }
     
     return slope;
 }
@@ -249,15 +264,15 @@ string determineShape(const vector <double> &coords){
     slopes.push_back(calculateSlope(coords[6],coords[7],coords[0],coords[1]));
 
     //if any 3 points form a line, the input does not form a quadrilateral
-    if(slopes[0]==slopes[1]){
-        return "error 4";
-    }
-    if(slopes[1]==slopes[2]){
-        return "error 4";
-    }
-    if(slopes[2]==slopes[3]){
-        return "error 4";
-    }
+//    if(slopes[0]==slopes[1]){
+//        return "error 4";
+//    }
+//    if(slopes[1]==slopes[2]){
+//        return "error 4";
+//    }
+//    if(slopes[2]==slopes[3]){
+//        return "error 4";
+//    }
     
     if(doLinesIntersect(coords)){
         return "error 3";
@@ -288,6 +303,17 @@ string determineShape(const vector <double> &coords){
     if(isKite(sideLengths)) {
         //cout<<"kite"<<endl;
         return "kite";
+    }
+    
+    //if any 3 points form a line, the input does not form a quadrilateral
+    if(slopes[0]==slopes[1]){
+        return "error 4";
+    }
+    if(slopes[1]==slopes[2]){
+        return "error 4";
+    }
+    if(slopes[2]==slopes[3]){
+        return "error 4";
     }
 
     //cout<<"quadrilateral"<<endl;
@@ -328,7 +354,11 @@ void readInputDetermineShape (){
 int main(int argc, const char * argv[]) {
     
     readInputDetermineShape();
-
+    //90 0 92 90 1 90
+//    cout<<calculateSlope(0,0,91,0)<<endl; //dx: 91 dy: 0 return: 0
+//    cout<<calculateSlope(91,0,92,90)<<endl; //dx: 1 dy: 90 return: 90/1
+//    cout<<calculateSlope(92,90,1,90)<<endl; //dx: -91 dy: 0 return: 0
+//    cout<<calculateSlope(1,90,0,0)<<endl; //dx: -1 dy: -90 return: 90/1
     
     return 0;
 }
