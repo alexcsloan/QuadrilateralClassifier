@@ -1,0 +1,332 @@
+    1|       |//
+    2|       |//  main.cpp
+    3|       |//  assignment3
+    4|       |//
+    5|       |//  Created by Alexander Sloan on 1/15/19.
+    6|       |//  Copyright © 2019 Alexander Sloan. All rights reserved.
+    7|       |//
+    8|       |
+    9|       |#include <iostream>
+   10|       |#include <vector>
+   11|       |#include <fstream>
+   12|       |#include <sstream>
+   13|       |#include <math.h>
+   14|       |#include <float.h>
+   15|       |#include <assert.h>
+   16|       |
+   17|       |
+   18|       |
+   19|       |using namespace std;
+   20|       |
+   21|       |// This pair is used to store the X and Y
+   22|       |// coordinates of a point respectively
+   23|  25.8k|#define pdd pair<double, double>
+   24|       |
+   25|       |//https://www.geeksforgeeks.org/program-for-point-of-intersection-of-two-lines/
+   26|       |pdd lineLineIntersection(pdd A, pdd B, pdd C, pdd D)
+   27|  8.60k|{
+   28|  8.60k|    // Line AB represented as a1x + b1y = c1
+   29|  8.60k|    double a1 = B.second - A.second;
+   30|  8.60k|    double b1 = A.first - B.first;
+   31|  8.60k|    double c1 = a1*(A.first) + b1*(A.second);
+   32|  8.60k|    
+   33|  8.60k|    // Line CD represented as a2x + b2y = c2
+   34|  8.60k|    double a2 = D.second - C.second;
+   35|  8.60k|    double b2 = C.first - D.first;
+   36|  8.60k|    double c2 = a2*(C.first)+ b2*(C.second);
+   37|  8.60k|    
+   38|  8.60k|    double determinant = a1*b2 - a2*b1;
+   39|  8.60k|    
+   40|  8.60k|    if (determinant == 0)
+   41|  4.43k|    {
+   42|  4.43k|        // The lines are parallel. This is simplified
+   43|  4.43k|        // by returning a pair of FLT_MAX
+   44|  4.43k|        return make_pair(FLT_MAX, FLT_MAX);
+   45|  4.43k|    }
+   46|  4.17k|    else
+   47|  4.17k|    {
+   48|  4.17k|        double x = (b2*c1 - b1*c2)/determinant;
+   49|  4.17k|        double y = (a1*c2 - a2*c1)/determinant;
+   50|  4.17k|        return make_pair(x, y);
+   51|  4.17k|    }
+   52|  8.60k|}
+   53|       |
+   54|  4.30k|bool doLinesIntersect (const vector<double> &coords){
+   55|  4.30k|    pdd A = make_pair(coords[0], coords[1]);
+   56|  4.30k|    pdd B = make_pair(coords[2], coords[3]);
+   57|  4.30k|    pdd C = make_pair(coords[4], coords[5]);
+   58|  4.30k|    pdd D = make_pair(coords[6], coords[7]);
+   59|  4.30k|    
+   60|  4.30k|    //line AB BC CD DA
+   61|  4.30k|    pdd intersection1 = lineLineIntersection(A, B, C, D);
+   62|  4.30k|    pdd intersection2 = lineLineIntersection(A, D, C, B);
+   63|  4.30k|    
+   64|  4.30k|    int xMax = coords[0];
+   65|  4.30k|    int yMax = coords[1];
+   66|  4.30k|    
+   67|  17.2k|    for(int i=2; i<coords.size(); i+=2){
+   68|  12.9k|        if(coords[i]>xMax){
+   69|  6.91k|            xMax=coords[i];
+   70|  6.91k|        }
+   71|  12.9k|    }
+   72|  4.30k|    
+   73|  17.2k|    for(int i=3; i<coords.size(); i+=2){
+   74|  12.9k|        if(coords[i]>yMax){
+   75|  6.35k|            yMax=coords[i];
+   76|  6.35k|        }
+   77|  12.9k|    }
+   78|  4.30k|    
+   79|  4.30k|    
+   80|  4.30k|
+   81|  4.30k|    if(intersection1.first<xMax && intersection1.second<yMax && intersection1.first>0 && intersection1.second>0){
+   82|  1.01k|
+   83|  1.01k|        //if intersection y > AB max y
+   84|  1.01k|        if(intersection1.second > coords[3]){
+   85|    345|            return false;
+   86|    345|        }
+   87|    666|
+   88|    666|        return true;
+   89|    666|    }
+   90|  3.28k|    if(intersection2.first<xMax && intersection2.second<yMax && intersection2.second>0 && intersection2.second>0){
+   91|    324|        return true;
+   92|    324|    }
+   93|  2.96k|    
+   94|  2.96k|
+   95|  2.96k|    return false;
+   96|  2.96k|}
+   97|       |
+   98|       |
+   99|  3.65k|bool isParallelogram(const vector<double> &sides, const vector<double> &slopes){
+  100|  3.65k|
+  101|  3.65k|    if (slopes[0] == slopes[2] && slopes[1] == slopes[3] && slopes[0] != slopes[1]) {
+  102|  1.95k|        return true;
+  103|  1.95k|    }
+  104|  1.70k|    return false;
+  105|  1.70k|}
+  106|       |
+  107|  1.82k|bool isRhombus(const vector<double> &sides, const vector<double> &slopes){
+  108|  1.82k|    
+  109|  1.82k|    if(!isParallelogram(sides,slopes)) return false;
+  110|    975|    
+  111|  2.44k|    for(int i=1; i<4; i++){
+  112|  1.95k|        if(sides[0]!=sides[i]) return false;
+  113|  1.95k|    }
+  114|    975|    return true;
+  115|    975|}
+  116|       |
+  117|  6.62k|bool isRectangle(const vector<double> &sides, const vector<double> &slopes){
+  118|  6.62k|    if(sides[0]!=sides[2] || sides[1]!=sides[3]) return false;
+  119|  3.94k|
+  120|  3.94k|    if(slopes[0]==0 && slopes[2]==0 && slopes[1]==0 && slopes[3]==0) return true;
+  121|  1.95k|    
+  122|  1.95k|    
+  123|  1.95k|    return false;
+  124|  1.95k|}
+  125|       |
+  126|  3.31k|bool isSquare(const vector<double> &sides, const vector<double> &slopes){
+  127|  3.31k|    if(!isRectangle(sides,slopes)) return false;
+  128|    995|    
+  129|  2.49k|    for(int i=1; i<4; i++){
+  130|  1.99k|        if(sides[0]!=sides[i]) return false;
+  131|  1.99k|    }
+  132|    995|    return true;
+  133|    995|}
+  134|       |
+  135|       |
+  136|  2.31k|bool isTrapezoid(const vector<double> &slopes){
+  137|  2.31k|    int sum = 0;
+  138|  2.31k|    
+  139|  2.31k|    if(slopes[0]==slopes[2]) sum++;
+  140|  2.31k|    if(slopes[1]==slopes[3]) sum++;
+  141|  2.31k|    
+  142|  2.31k|    return sum==1;
+  143|  2.31k|}
+  144|       |
+  145|    850|bool isKite(const vector<double> &sides){
+  146|    850|    int counter = 0;
+  147|    850|    
+  148|    850|    if(sides[0]==sides[1] || sides[0]==sides[3]) counter++;
+  149|    850|    if(sides[1]==sides[2] || sides[2]==sides[3]) counter++;
+  150|    850|    
+  151|    850|    return counter==2;
+  152|    850|}
+  153|       |
+  154|       |
+  155|       |//this function will return a vector with the length of the 4 sides of the shape and the 4 angles
+  156|  1.49k|vector<double> parseString (const string& input){
+  157|  1.49k|    vector <double> shape;
+  158|  1.49k|    //pushing back 0,0 to the vector because this is assumed to be the first coordinate
+  159|  1.49k|    shape.push_back(0);
+  160|  1.49k|    shape.push_back(0);
+  161|  1.49k|
+  162|  1.49k|    vector<string> results;
+  163|  1.49k|    
+  164|  1.49k|    istringstream iss(input);
+  165|  1.49k|    
+  166|  9.94k|    for(string input; iss>>input;)
+  167|  8.45k|        results.push_back(input);
+  168|  1.49k|    
+  169|  1.49k|
+  170|  9.85k|    for(int i=0; i<results.size(); i++){
+  171|  8.45k|        //if the string to double conversion is not possible
+  172|  8.45k|        try{
+  173|  8.45k|            shape.push_back(stod(results[i]));
+  174|  8.45k|        }catch(const std::invalid_argument& e){
+  175|     82|            vector<double> fail;
+  176|     82|            return fail;
+  177|     82|        }
+  178|  8.45k|    }
+  179|  1.49k|    
+  180|  1.49k|    return shape;
+  181|  1.49k|}
+  182|       |
+  183|       |//function to calculate the length of a line between 2 sets of x and y coordinates
+  184|  17.2k|double calculateLength (double x1, double y1, double x2, double y2){
+  185|  17.2k|    double distance = 0;
+  186|  17.2k|    
+  187|  17.2k|    distance = sqrt(pow((x2-x1),2) + pow((y2-y1),2));
+  188|  17.2k|    
+  189|  17.2k|    return distance;
+  190|  17.2k|}
+  191|       |
+  192|       |
+  193|       |//function to calculate the slope between 2 sets of x and y coordinates
+  194|  17.2k|double calculateSlope(double x1, double y1, double x2, double y2){
+  195|  17.2k|    double dx = (x2 - x1);
+  196|  17.2k|    double dy = (y2 - y1);
+  197|  17.2k|    
+  198|  17.2k|    if(dy==0){
+  199|  4.03k|        return 0;
+  200|  4.03k|    }
+  201|  13.1k|    
+  202|  13.1k|    if(dx==0){
+  203|  2.06k|        return 0;
+  204|  2.06k|    }
+  205|  11.0k|    
+  206|  11.0k|    
+  207|  11.0k|    double slope = dy / dx;
+  208|  11.0k|    
+  209|  11.0k|    
+  210|  11.0k|    return slope;
+  211|  11.0k|}
+  212|       |
+  213|  4.89k|string determineShape(const vector <double> &coords){
+  214|  4.89k|    
+  215|  4.89k|    if(coords.size()!=8){
+  216|     98|        return "error 1";
+  217|     98|    }
+  218|  4.80k|    
+  219|  41.4k|    for(int i=0; i<coords.size(); i++){
+  220|  36.9k|        if(coords[i] < 0 || coords[i] > 100){
+  221|    300|            return "error 1";
+  222|    300|        }
+  223|  36.9k|    }
+  224|  4.80k|    
+  225|  4.80k|    
+  226|  4.80k|    //if any 2 points are the same, the input is invalid and cannot form a quadrilateral
+  227|  17.6k|    for(int i=0; i<5; i+=2){
+  228|  39.7k|        for(int j=i+2; j<coords.size()-1; j+=2){
+  229|  26.6k|            if(coords[i]==coords[j]){
+  230|  2.29k|                if(coords[i+1]==coords[j+1]){
+  231|    200|                    return "error 2";
+  232|    200|                }
+  233|  2.29k|            }
+  234|  26.6k|        }
+  235|  13.3k|    }
+  236|  4.50k|    
+  237|  4.50k|
+  238|  4.50k|    //a vector to contain the 4 side lengths of the shape
+  239|  4.50k|    vector <double> sideLengths;
+  240|  4.30k|    //a vector to contain the slopes of the 4 lines
+  241|  4.30k|    vector <double> slopes;
+  242|  4.30k|    
+  243|  4.30k|    sideLengths.push_back(calculateLength(coords[0],coords[1],coords[2],coords[3]));
+  244|  4.30k|    sideLengths.push_back(calculateLength(coords[2],coords[3],coords[4],coords[5]));
+  245|  4.30k|    sideLengths.push_back(calculateLength(coords[4],coords[5],coords[6],coords[7]));
+  246|  4.30k|    sideLengths.push_back(calculateLength(coords[6],coords[7],coords[0],coords[1]));
+  247|  4.30k|    
+  248|  4.30k|    slopes.push_back(calculateSlope(coords[0],coords[1],coords[2],coords[3]));
+  249|  4.30k|    slopes.push_back(calculateSlope(coords[2],coords[3],coords[4],coords[5]));
+  250|  4.30k|    slopes.push_back(calculateSlope(coords[4],coords[5],coords[6],coords[7]));
+  251|  4.30k|    slopes.push_back(calculateSlope(coords[6],coords[7],coords[0],coords[1]));
+  252|  4.30k|    
+  253|  4.30k|    if(doLinesIntersect(coords)){
+  254|    990|        return "error 3";
+  255|    990|    }
+  256|  3.31k|    
+  257|  3.31k|    if(isSquare(sideLengths,slopes)){
+  258|    500|        assert (isRectangle(sideLengths, slopes));
+  259|    500|        return "square";
+  260|    500|    }
+  261|  2.81k|    if(isRectangle(sideLengths,slopes)){
+  262|    495|        return "rectangle";
+  263|    495|    }
+  264|  2.31k|    
+  265|  2.31k|    if(isTrapezoid(slopes)){
+  266|    490|        return "trapezoid";
+  267|    490|    }
+  268|  1.82k|    
+  269|  1.82k|    if(isRhombus(sideLengths,slopes)){
+  270|    490|        assert(isParallelogram(sideLengths,slopes));
+  271|    490|        return "rhombus";
+  272|    490|    }
+  273|  1.33k|    if(isParallelogram(sideLengths,slopes)){
+  274|    485|        return "parallelogram";
+  275|    485|    }
+  276|    850|    if(isKite(sideLengths)) {
+  277|      0|        return "kite";
+  278|      0|    }
+  279|    850|    
+  280|    850|    //if any 3 points form a line, the input does not form a quadrilateral
+  281|    850|    if(slopes[0]==slopes[1]){
+  282|      0|        return "error 4";
+  283|      0|    }
+  284|    850|    if(slopes[1]==slopes[2]){
+  285|      0|        return "error 4";
+  286|      0|    }
+  287|    850|    if(slopes[2]==slopes[3]){
+  288|      0|        return "error 4";
+  289|      0|    }
+  290|    850|
+  291|    850|    return "quadrilateral";
+  292|    850|}
+  293|       |
+  294|  1.00k|void readInputDetermineShape (){
+  295|  1.00k|    vector <double> coords;
+  296|  1.00k|    string s;
+  297|  1.66k|    while(getline(cin,s)){
+  298|  1.49k|        if(!s.empty()){
+  299|  1.49k|            coords = parseString(s);
+  300|  1.49k|            if(determineShape(coords)=="error 1"){
+  301|    398|                cout<<"error 1"<<endl;
+  302|    398|                break;
+  303|    398|            }
+  304|  1.09k|            if(determineShape(coords)=="error 2"){
+  305|    100|                cout<<"error 2"<<endl;
+  306|    100|                break;
+  307|    100|            }
+  308|    992|            if(determineShape(coords)=="error 3"){
+  309|    330|                cout<<"error 3"<<endl;
+  310|    330|                break;
+  311|    330|            }
+  312|    662|            if(determineShape(coords)=="error 4"){
+  313|      0|                cout<<"error 4"<<endl;
+  314|      0|                break;
+  315|    662|            }else{
+  316|    662|                cout<<determineShape(coords)<<endl;
+  317|    662|            }
+  318|    662|        }
+  319|  1.49k|        
+  320|  1.49k|    }
+  321|  1.00k|}
+  322|       |
+  323|       |
+  324|       |
+  325|  1.00k|int main(int argc, const char * argv[]) {
+  326|  1.00k|    
+  327|  1.00k|    readInputDetermineShape();
+  328|  1.00k|    
+  329|  1.00k|    return 0;
+  330|  1.00k|}
+  331|       |
+

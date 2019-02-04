@@ -12,6 +12,7 @@
 #include <sstream>
 #include <math.h>
 #include <float.h>
+#include <assert.h>
 
 
 
@@ -96,12 +97,7 @@ bool doLinesIntersect (const vector<double> &coords){
 
 
 bool isParallelogram(const vector<double> &sides, const vector<double> &slopes){
-//    int counter = 0;
-//    if(slopes[0]==slopes[2] && slopes[1]==slopes[3]) counter++;
-//    if(sides[0]==sides[2] && sides[1]==sides[3]) counter++;
-//
-//    return counter==2;
-    
+
     if (slopes[0] == slopes[2] && slopes[1] == slopes[3] && slopes[0] != slopes[1]) {
         return true;
     }
@@ -121,7 +117,6 @@ bool isRhombus(const vector<double> &sides, const vector<double> &slopes){
 bool isRectangle(const vector<double> &sides, const vector<double> &slopes){
     if(sides[0]!=sides[2] || sides[1]!=sides[3]) return false;
 
-    //if(slopes[0]==0 && slopes[2]==0 && slopes[1]==90 && slopes[3]==90) return true;
     if(slopes[0]==0 && slopes[2]==0 && slopes[1]==0 && slopes[3]==0) return true;
     
     
@@ -204,18 +199,13 @@ double calculateSlope(double x1, double y1, double x2, double y2){
         return 0;
     }
     
-    //decided to make a vertical line return 90 while a horizontal line will return 0
     if(dx==0){
-        //return 90;
         return 0;
     }
     
     
     double slope = dy / dx;
     
-//    if(slope==90){
-//        return 90.5;
-//    }
     
     return slope;
 }
@@ -223,13 +213,11 @@ double calculateSlope(double x1, double y1, double x2, double y2){
 string determineShape(const vector <double> &coords){
     
     if(coords.size()!=8){
-        //cout<<"error 1"<<endl;
         return "error 1";
     }
     
     for(int i=0; i<coords.size(); i++){
         if(coords[i] < 0 || coords[i] > 100){
-            //cout<<"error 1"<<endl;
             return "error 1";
         }
     }
@@ -240,7 +228,6 @@ string determineShape(const vector <double> &coords){
         for(int j=i+2; j<coords.size()-1; j+=2){
             if(coords[i]==coords[j]){
                 if(coords[i+1]==coords[j+1]){
-                    //cout<<"error 2"<<endl;
                     return "error 2";
                 }
             }
@@ -262,46 +249,31 @@ string determineShape(const vector <double> &coords){
     slopes.push_back(calculateSlope(coords[2],coords[3],coords[4],coords[5]));
     slopes.push_back(calculateSlope(coords[4],coords[5],coords[6],coords[7]));
     slopes.push_back(calculateSlope(coords[6],coords[7],coords[0],coords[1]));
-
-    //if any 3 points form a line, the input does not form a quadrilateral
-//    if(slopes[0]==slopes[1]){
-//        return "error 4";
-//    }
-//    if(slopes[1]==slopes[2]){
-//        return "error 4";
-//    }
-//    if(slopes[2]==slopes[3]){
-//        return "error 4";
-//    }
     
     if(doLinesIntersect(coords)){
         return "error 3";
     }
     
     if(isSquare(sideLengths,slopes)){
-        //cout<<"square"<<endl;
+        assert (isRectangle(sideLengths, slopes));
         return "square";
     }
     if(isRectangle(sideLengths,slopes)){
-        //cout<<"rectangle"<<endl;
         return "rectangle";
     }
     
     if(isTrapezoid(slopes)){
-        //cout<<"trapezoid"<<endl;
         return "trapezoid";
     }
     
     if(isRhombus(sideLengths,slopes)){
-        //cout<<"rhombus"<<endl;
+        assert(isParallelogram(sideLengths,slopes));
         return "rhombus";
     }
     if(isParallelogram(sideLengths,slopes)){
-        //cout<<"parallelogram"<<endl;
         return "parallelogram";
     }
     if(isKite(sideLengths)) {
-        //cout<<"kite"<<endl;
         return "kite";
     }
     
@@ -316,7 +288,6 @@ string determineShape(const vector <double> &coords){
         return "error 4";
     }
 
-    //cout<<"quadrilateral"<<endl;
     return "quadrilateral";
 }
 
@@ -354,11 +325,6 @@ void readInputDetermineShape (){
 int main(int argc, const char * argv[]) {
     
     readInputDetermineShape();
-    //90 0 92 90 1 90
-//    cout<<calculateSlope(0,0,91,0)<<endl; //dx: 91 dy: 0 return: 0
-//    cout<<calculateSlope(91,0,92,90)<<endl; //dx: 1 dy: 90 return: 90/1
-//    cout<<calculateSlope(92,90,1,90)<<endl; //dx: -91 dy: 0 return: 0
-//    cout<<calculateSlope(1,90,0,0)<<endl; //dx: -1 dy: -90 return: 90/1
     
     return 0;
 }
