@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 import random
 import string
-path = "/Users/alexcsloan/Desktop/QuadrilateralClassifier/testFiles"
+#path = "/Users/alexcsloan/Desktop/QuadrilateralClassifier/testFiles"
+path = "testFiles"
 
 # make this file executable with: chmod +x shapes.py
 
