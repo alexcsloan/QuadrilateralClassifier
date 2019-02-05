@@ -6,6 +6,7 @@
 //  Copyright © 2019 Alexander Sloan. All rights reserved.
 //
 
+
 #include <iostream>
 #include <vector>
 #include <fstream>
@@ -250,9 +251,22 @@ string determineShape(const vector <double> &coords){
     slopes.push_back(calculateSlope(coords[4],coords[5],coords[6],coords[7]));
     slopes.push_back(calculateSlope(coords[6],coords[7],coords[0],coords[1]));
     
+    
+    //if any 3 points form a line, the input does not form a quadrilateral
+    if(slopes[0]==slopes[1]&&!isSquare(sideLengths,slopes)&&!isRectangle(sideLengths,slopes)){
+        return "error 4";
+    }
+    if(slopes[1]==slopes[2]&&!isSquare(sideLengths,slopes)&&!isRectangle(sideLengths,slopes)){
+        return "error 4";
+    }
+    if(slopes[2]==slopes[3]&&!isSquare(sideLengths,slopes)&&!isRectangle(sideLengths,slopes)){
+        return "error 4";
+    }
+    
     if(doLinesIntersect(coords)){
         return "error 3";
     }
+
     
     if(isSquare(sideLengths,slopes)){
         assert (isRectangle(sideLengths, slopes));
@@ -277,16 +291,7 @@ string determineShape(const vector <double> &coords){
         return "kite";
     }
     
-    //if any 3 points form a line, the input does not form a quadrilateral
-    if(slopes[0]==slopes[1]){
-        return "error 4";
-    }
-    if(slopes[1]==slopes[2]){
-        return "error 4";
-    }
-    if(slopes[2]==slopes[3]){
-        return "error 4";
-    }
+
 
     return "quadrilateral";
 }
