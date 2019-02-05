@@ -118,50 +118,7 @@ echo "err8 test didn't run properly!"
 exit 1
 fi
 
-./main < txtFiles/err9.txt > txtFiles/err9Output.txt
-diff txtFiles/err9Output.txt txtFiles/err9Sol.txt
-error=$?
-if [ $error -eq 0 ]
-then
-echo "err9 test passed!"
-elif [ $error -eq 1 ]
-then
-echo "err9 test failed!"
-exit 1
-else
-echo "err9 test didn't run properly!"
-exit 1
-fi
 
-./main < txtFiles/err10.txt > txtFiles/err10Output.txt
-diff txtFiles/err10Output.txt txtFiles/err10Sol.txt
-error=$?
-if [ $error -eq 0 ]
-then
-echo "err10 test passed!"
-elif [ $error -eq 1 ]
-then
-echo "err10 test failed!"
-exit 1
-else
-echo "err10 test didn't run properly!"
-exit 1
-fi
-
-./main < txtFiles/err11.txt > txtFiles/err11Output.txt
-diff txtFiles/err11Output.txt txtFiles/err11Sol.txt
-error=$?
-if [ $error -eq 0 ]
-then
-echo "err11 test passed!"
-elif [ $error -eq 1 ]
-then
-echo "err11 test failed!"
-exit 1
-else
-echo "err11 test didn't run properly!"
-exit 1
-fi
 
 ./main < txtFiles/err12.txt > txtFiles/err12Output.txt
 diff txtFiles/err12Output.txt txtFiles/err12Sol.txt
@@ -253,20 +210,7 @@ echo "parallelogram test didn't run properly!"
 exit 1
 fi
 
-./main < txtFiles/quadrilateral.txt > txtFiles/quadrilateralOutput.txt
-diff txtFiles/quadrilateralOutput.txt txtFiles/quadrilateralSol.txt
-error=$?
-if [ $error -eq 0 ]
-then
-echo "quadrilateral test passed!"
-elif [ $error -eq 1 ]
-then
-echo "quadrilateral test failed!"
-exit 1
-else
-echo "quadrilateral test didn't run properly!"
-exit 1
-fi
+
 
 ./main < txtFiles/rectangle.txt > txtFiles/rectangleOutput.txt
 diff txtFiles/rectangleOutput.txt txtFiles/rectangleSol.txt
@@ -298,20 +242,7 @@ echo "rhombus test didn't run properly!"
 exit 1
 fi
 
-./main < txtFiles/square.txt > txtFiles/squareOutput.txt
-diff txtFiles/squareOutput.txt txtFiles/squareSol.txt
-error=$?
-if [ $error -eq 0 ]
-then
-echo "square test passed!"
-elif [ $error -eq 1 ]
-then
-echo "square test failed!"
-exit 1
-else
-echo "square test didn't run properly!"
-exit 1
-fi
+
 
 ./main < txtFiles/trapezoid.txt > txtFiles/trapezoidOutput.txt
 diff txtFiles/trapezoidOutput.txt txtFiles/trapezoidSol.txt
