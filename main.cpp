@@ -249,20 +249,21 @@ string determineShape(const vector <double> &coords){
     slopes.push_back(calculateSlope(coords[6],coords[7],coords[0],coords[1]));
     
     
-    //if any 3 points form a line, the input does not form a quadrilateral
-    if(slopes[0]==slopes[1]&&!isSquare(sideLengths,slopes)&&!isRectangle(sideLengths,slopes)){
-        return "error 4";
-    }
-    if(slopes[1]==slopes[2]&&!isSquare(sideLengths,slopes)&&!isRectangle(sideLengths,slopes)){
-        return "error 4";
-    }
-    if(slopes[2]==slopes[3]&&!isSquare(sideLengths,slopes)&&!isRectangle(sideLengths,slopes)){
-        return "error 4";
-    }
+    Point one = {0,0};
+    Point two = {static_cast<int>(coords[2]),static_cast<int>(coords[3])};
+    Point three = {static_cast<int>(coords[4]),static_cast<int>(coords[5])};
+    Point four = {static_cast<int>(coords[6]),static_cast<int>(coords[7])};
+    
+    if(orientation(one,two,three)==0) return "error 4";
+    if(orientation(two,three,four)==0) return "error 4";
+    if(orientation(three,four,one)==0) return "error 4";
+    if(orientation(four,one,two)==0) return "error 4";
+    
     
     if(isError3(coords)){
         return "error 3";
     }
+    
 
     
     if(isSquare(sideLengths,slopes)){
