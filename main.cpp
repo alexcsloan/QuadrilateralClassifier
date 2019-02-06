@@ -19,81 +19,70 @@
 
 using namespace std;
 
-// This pair is used to store the X and Y
-// coordinates of a point respectively
-#define pdd pair<double, double>
-
-//https://www.geeksforgeeks.org/program-for-point-of-intersection-of-two-lines/
-pdd lineLineIntersection(pdd A, pdd B, pdd C, pdd D)
+//error 3 detection from: https://codea.io/talk/discussion/5930/line-segment-intersection
+struct Point
 {
-    // Line AB represented as a1x + b1y = c1
-    double a1 = B.second - A.second;
-    double b1 = A.first - B.first;
-    double c1 = a1*(A.first) + b1*(A.second);
+    int x;
+    int y;
+};
+
+// Given three colinear points p, q, r, the function checks if
+// point q lies on line segment 'pr'
+bool onSegment(Point p, Point q, Point r)
+{
+    if (q.x <= max(p.x, r.x) && q.x >= min(p.x, r.x) &&
+        q.y <= max(p.y, r.y) && q.y >= min(p.y, r.y))
+        return true;
     
-    // Line CD represented as a2x + b2y = c2
-    double a2 = D.second - C.second;
-    double b2 = C.first - D.first;
-    double c2 = a2*(C.first)+ b2*(C.second);
-    
-    double determinant = a1*b2 - a2*b1;
-    
-    if (determinant == 0)
-    {
-        // The lines are parallel. This is simplified
-        // by returning a pair of FLT_MAX
-        return make_pair(FLT_MAX, FLT_MAX);
-    }
-    else
-    {
-        double x = (b2*c1 - b1*c2)/determinant;
-        double y = (a1*c2 - a2*c1)/determinant;
-        return make_pair(x, y);
-    }
+    return false;
 }
 
-bool doLinesIntersect (const vector<double> &coords){
-    pdd A = make_pair(coords[0], coords[1]);
-    pdd B = make_pair(coords[2], coords[3]);
-    pdd C = make_pair(coords[4], coords[5]);
-    pdd D = make_pair(coords[6], coords[7]);
+// To find orientation of ordered triplet (p, q, r).
+// The function returns following values
+// 0 --> p, q and r are colinear
+// 1 --> Clockwise
+// 2 --> Counterclockwise
+int orientation(Point p, Point q, Point r)
+{
+    // See 10th slides from following link for derivation of the formula
+    // http://www.dcs.gla.ac.uk/~pat/52233/slides/Geometry1x1.pdf
+    int val = (q.y - p.y) * (r.x - q.x) -
+    (q.x - p.x) * (r.y - q.y);
     
-    //line AB BC CD DA
-    pdd intersection1 = lineLineIntersection(A, B, C, D);
-    pdd intersection2 = lineLineIntersection(A, D, C, B);
+    if (val == 0) return 0;  // colinear
     
-    int xMax = coords[0];
-    int yMax = coords[1];
-    
-    for(int i=2; i<coords.size(); i+=2){
-        if(coords[i]>xMax){
-            xMax=coords[i];
-        }
-    }
-    
-    for(int i=3; i<coords.size(); i+=2){
-        if(coords[i]>yMax){
-            yMax=coords[i];
-        }
-    }
-    
-    
+    return (val > 0)? 1: 2; // clock or counterclock wise
+}
 
-    if(intersection1.first<xMax && intersection1.second<yMax && intersection1.first>0 && intersection1.second>0){
-
-        //if intersection y > AB max y
-        if(intersection1.second > coords[3]){
-            return false;
-        }
-
+// The main function that returns true if line segment 'p1q1'
+// and 'p2q2' intersect.
+bool doIntersect(Point p1, Point q1, Point p2, Point q2)
+{
+    // Find the four orientations needed for general and
+    // special cases
+    int o1 = orientation(p1, q1, p2);
+    int o2 = orientation(p1, q1, q2);
+    int o3 = orientation(p2, q2, p1);
+    int o4 = orientation(p2, q2, q1);
+    
+    // General case
+    if (o1 != o2 && o3 != o4)
         return true;
-    }
-    if(intersection2.first<xMax && intersection2.second<yMax && intersection2.second>0 && intersection2.second>0){
-        return true;
-    }
     
-
-    return false;
+    // Special Cases
+    // p1, q1 and p2 are colinear and p2 lies on segment p1q1
+    if (o1 == 0 && onSegment(p1, p2, q1)) return true;
+    
+    // p1, q1 and p2 are colinear and q2 lies on segment p1q1
+    if (o2 == 0 && onSegment(p1, q2, q1)) return true;
+    
+    // p2, q2 and p1 are colinear and p1 lies on segment p2q2
+    if (o3 == 0 && onSegment(p2, p1, q2)) return true;
+    
+    // p2, q2 and q1 are colinear and q1 lies on segment p2q2
+    if (o4 == 0 && onSegment(p2, q1, q2)) return true;
+    
+    return false; // Doesn't fall in any of the above cases
 }
 
 
@@ -211,6 +200,14 @@ double calculateSlope(double x1, double y1, double x2, double y2){
     return slope;
 }
 
+bool isError3(const vector<double> coords){
+    struct Point A = {0,0}, B = {static_cast<int>(coords[2]), static_cast<int>(coords[3])}, C = {static_cast<int>(coords[4]), static_cast<int>(coords[5])}, D = {static_cast<int>(coords[6]), static_cast<int>(coords[7])};
+    //only opposite lines can intersect
+    if(doIntersect(A, B, C, D)) return true;
+    if(doIntersect(B, C, D, A)) return true;
+    return false;
+}
+
 string determineShape(const vector <double> &coords){
     
     if(coords.size()!=8){
@@ -263,7 +260,7 @@ string determineShape(const vector <double> &coords){
         return "error 4";
     }
     
-    if(doLinesIntersect(coords)){
+    if(isError3(coords)){
         return "error 3";
     }
 
@@ -290,8 +287,6 @@ string determineShape(const vector <double> &coords){
     if(isKite(sideLengths)) {
         return "kite";
     }
-    
-
 
     return "quadrilateral";
 }
@@ -324,7 +319,6 @@ void readInputDetermineShape (){
         
     }
 }
-
 
 
 int main(int argc, const char * argv[]) {

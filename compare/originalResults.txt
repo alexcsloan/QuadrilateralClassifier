@@ -1,0 +1,33 @@
+quadrilateral:
+     alex: 3289
+     oliver: 5688
+parallelogram:
+     alex: 97
+     oliver: 97
+square:
+     alex: 100
+     oliver: 100
+trapezoid:
+     alex: 103
+     oliver: 101
+kite:
+     alex: 0
+     oliver: 0
+rhombus:
+     alex: 98
+     oliver: 98
+rectangle:
+     alex: 99
+     oliver: 99
+error 1:
+     alex: 994
+     oliver: 1000
+error 2:
+     alex: 506
+     oliver: 506
+error 3:
+     alex: 6676
+     oliver: 4281
+error 4:
+     alex: 24
+     oliver: 22

@@ -36,11 +36,21 @@ clean:
 	rm -f coverage.profdata
 	rm -rf testFiles/*
 
+
+
 fuzzer:
 	clang++ main.cpp -o main
 	chmod +x shapes.py
 	./shapes.py
 	chmod +x fuzz
+
+comparison:
+	clang++ -std=c++11 OliverClassifier.cpp -o oliver
+	clang++ main.cpp -o main
+	chmod +x comparison.py
+	./comparison.py
+	chmod +x comparison.sh
+
 	
 
 cover:
